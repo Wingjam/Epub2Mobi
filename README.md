@@ -15,5 +15,5 @@ brew install --cask calibre
 ## Run
 
 ```bash
-python3 epub2mobi.py [fromdir]
+python3 epub2mobi.py [fromDir]
 ```

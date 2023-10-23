@@ -2,14 +2,15 @@
 
 import os
 
-def epub2mobi(fromdir):
+def epub2mobi(from_dir):
     """
     Convert .epub to .mobi.
     Requires ebook-convert from calibre (http://calibre-ebook.com).
     """
 
     converted_files = []
-    for root, dirs, files in os.walk(fromdir):
+    unconverted_files = []
+    for root, dirs, files in os.walk(from_dir):
         for filename in files:
             _, ext = os.path.splitext(filename)
             if ext == '.epub':
@@ -19,16 +20,21 @@ def epub2mobi(fromdir):
                     print(f"🕒 Converting \"{epub_file_path}\" to \"{mobi_file_path}\" ...")
                     ret = os.system(f"ebook-convert \"{epub_file_path}\" \"{mobi_file_path}\"")
                     if (ret == 0):
-                        converted_files.append(mobi_file_path)
+                        print(f"✅ Converted {epub_file_path.replace(from_dir, '')}")
+                        converted_files.append(epub_file_path.replace(from_dir, ''))
+                    else:
+                        print(f"❌ Error converting {epub_file_path.replace(from_dir, '')}")
+                        unconverted_files.append(epub_file_path.replace(from_dir, ''))
 
-    print("\nConverted files:")
-    for converted_file in converted_files:
-        print(converted_file)
+    print("")
+    print("✅ Done")
+    print("Converted files:", converted_files)
+    print("Unconverted files:", unconverted_files)
 
 if __name__ == '__main__':
     import sys
-    fromdir = '.'
+    from_dir = '.'
     if len(sys.argv) == 2:
-        fromdir = sys.argv[1]
+        from_dir = sys.argv[1]
 
-    epub2mobi(fromdir)
+    epub2mobi(from_dir)
